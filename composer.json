@@ -1,0 +1,29 @@
+{
+    "name": "kaliel/kirby-comarquage",
+    "description": "Comarquage kirby plugin",
+    "type": "kirby-plugin",
+    "license": "MIT",
+    "homepage": "https://getkirby.com/plugins/kaliel/kirby-comarquage",
+    "version": "0.1.0",
+    "authors": [
+        {
+            "name": "Maxime CHENE",
+            "email": "maxime@kaliel.fr",
+            "homepage": "https://getkirby.com/plugins/kaliel"
+        }
+    ],
+    "require": {
+        "getkirby/composer-installer": "^1.2"
+    },
+    "extra": {
+        "installer-name": "kirby-comarquage"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kaliel\\Comarquage\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}

@@ -5,19 +5,37 @@ namespace Kaliel\Comarquage;
 
 use DateTime;
 use Kirby\Exception\InvalidArgumentException;
+use Kirby\Filesystem\F;
 use Kirby\Http\Remote;
+use ZipArchive;
 
 class Updater
 {
 
     const CACHE_PATH = 'kaliel.kirby-comarquage';
 
-
-    public function download(): void
+    public function download(): bool
     {
-        $timestamp = $this->getRemoteLastModified();
-        debug($this->getLocalLastModified());
-        dd($timestamp);
+        $url = option('comarquage.zipUrl');
+        $response = Remote::get($url);
+
+        if ($response->code() !== 200) {
+            return false;
+        }
+
+        $dest = kirby()->root('index') . DS . 'comarquage';
+        F::write($dest . DS . 'tmp.zip', $response->content());
+
+        $zip = new ZipArchive;
+        if ($zip->open($dest . DS . 'tmp.zip') === TRUE) {
+            $zip->extractTo($dest);
+            $zip->close();
+            F::remove($dest . DS . 'tmp.zip');
+            echo 'ok';
+        } else {
+            return false;
+        }
+        dd('done');
     }
 
     public function update(): bool
@@ -25,6 +43,8 @@ class Updater
         if (!$this->needUpdate()) {
             return false;
         }
+
+        return $this->download();
     }
 
     public function pull(): void
